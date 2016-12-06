@@ -7,6 +7,7 @@ import {AddCar} from './addCar.jsx';
 import {SoldCar} from './soldCar.jsx';
 import {AddRepair} from './addRepair.jsx';
 import {SoldCarInventoryList} from './soldcarinventory.jsx';
+import {UserLogin} from './userlogin.jsx';
 
 
 class App extends React.Component {
@@ -14,9 +15,8 @@ class App extends React.Component {
     super(props)
     this.state = {
       cars: [],
-      soldCars: [{make:"Lexus",
-    model:"GS",
-    last4: 40000}],
+      soldCars: [],
+      userLoggedIn: false,
     }
   }
 
@@ -69,9 +69,29 @@ class App extends React.Component {
     current[0].repairs += Number(car.repair)
     this.setState({ cars : this.state.cars })
   }
+  addUserName(user){
+    console.log(user)
+    if(user.username === 'blake' && user.password === 'blake'){
+      console.log('entered')
+      this.setState({
+      userLoggedIn : true
+      })
+    }
+  }
 
 
   render () {
+
+    if(this.state.userLoggedIn === false){
+      return(<div>
+        <UserLogin
+        addUserName = {this.addUserName.bind(this)}
+        />
+      </div>)
+
+    }else{
+
+
     return (<div>
       <AddCar addVehicleSubmit = {this.addVehicleSubmit.bind(this)} />
       --------------Current Inventory Tracker--------
@@ -88,6 +108,7 @@ class App extends React.Component {
       ---------------------------------------------
       <SoldCarInventoryList cars = {this.state.soldCars}/>
     </div>)
+    }
   }
 }
 
