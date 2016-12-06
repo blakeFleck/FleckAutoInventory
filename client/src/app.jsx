@@ -5,14 +5,18 @@ import $ from 'jquery';
 import {CarList} from './carList.jsx';
 import {AddCar} from './addCar.jsx';
 import {SoldCar} from './soldCar.jsx';
-import {AddRepair} from './addRepair.jsx'
+import {AddRepair} from './addRepair.jsx';
+import {SoldCarInventoryList} from './soldcarinventory.jsx';
+
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       cars: [],
-      soldCars: [],
+      soldCars: [{make:"Lexus",
+    model:"GS",
+    last4: 40000}],
     }
   }
 
@@ -63,10 +67,19 @@ class App extends React.Component {
   render () {
     return (<div>
       <AddCar addVehicleSubmit = {this.addVehicleSubmit.bind(this)} />
+      --------------Current Inventory Tracker--------
+      ---------------------------------------------
       <CarList cars = {this.state.cars} />
+      --------------Add to Sold Inventory--------
+      ---------------------------------------------
+
       <SoldCar soldVehicleSubmit={this.soldVehicleSubmit.bind(this)}/>
+      --------------Add Repair--------------------
+      ---------------------------------------------
       <AddRepair addRepairSubmit={this.addRepairSubmit.bind(this)}/>
-      <SoldVehicleInventory/>
+      --------------Sold Inventory Tracker--------
+      ---------------------------------------------
+      <SoldCarInventoryList cars = {this.state.soldCars}/>
     </div>)
   }
 }
