@@ -16,9 +16,10 @@ app.use(function(req, res, next) {
 
 app.post('/vehicles', function(req, res) {
   var vehicle = req.body;
+  console.log(vehicle)
   var counter = data[data.length-1].id + 1;
   vehicle.id = counter;
-  vehicle.push(dog);
+  data.push(vehicle);
   res.send(data);
 });
 

@@ -34,8 +34,21 @@ class App extends React.Component {
 
   }
   addVehicleSubmit(car){
-
-    this.setState({ cars: this.state.cars.concat(car) })
+    var self = this;
+    $.ajax({
+      url: 'http://localhost:3000/vehicles',
+      method: 'POST',
+      dataType: 'json',
+      data: car,
+      success: function(data) {
+        self.setState({
+          cars: self.state.cars.concat(data)
+        });
+      },
+      error: function(xhr, textStatus, error) {
+        console.log('text status', textStatus, 'error', error);
+      }
+    });
 
   }
   soldVehicleSubmit(car){
@@ -53,6 +66,7 @@ class App extends React.Component {
       <CarList cars = {this.state.cars} />
       <SoldCar soldVehicleSubmit={this.soldVehicleSubmit.bind(this)}/>
       <AddRepair addRepairSubmit={this.addRepairSubmit.bind(this)}/>
+      <SoldVehicleInventory/>
     </div>)
   }
 }

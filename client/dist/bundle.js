@@ -116,8 +116,21 @@
 	  }, {
 	    key: 'addVehicleSubmit',
 	    value: function addVehicleSubmit(car) {
-	
-	      this.setState({ cars: this.state.cars.concat(car) });
+	      var self = this;
+	      _jquery2.default.ajax({
+	        url: 'http://localhost:3000/vehicles',
+	        method: 'POST',
+	        dataType: 'json',
+	        data: car,
+	        success: function success(data) {
+	          self.setState({
+	            cars: self.state.cars.concat(data)
+	          });
+	        },
+	        error: function error(xhr, textStatus, _error2) {
+	          console.log('text status', textStatus, 'error', _error2);
+	        }
+	      });
 	    }
 	  }, {
 	    key: 'soldVehicleSubmit',
@@ -143,7 +156,8 @@
 	        _react2.default.createElement(_addCar.AddCar, { addVehicleSubmit: this.addVehicleSubmit.bind(this) }),
 	        _react2.default.createElement(_carList.CarList, { cars: this.state.cars }),
 	        _react2.default.createElement(_soldCar.SoldCar, { soldVehicleSubmit: this.soldVehicleSubmit.bind(this) }),
-	        _react2.default.createElement(_addRepair.AddRepair, { addRepairSubmit: this.addRepairSubmit.bind(this) })
+	        _react2.default.createElement(_addRepair.AddRepair, { addRepairSubmit: this.addRepairSubmit.bind(this) }),
+	        _react2.default.createElement(SoldVehicleInventory, null)
 	      );
 	    }
 	  }]);
