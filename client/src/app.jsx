@@ -38,6 +38,7 @@ class App extends React.Component {
 
   }
   addVehicleSubmit(car){
+    console.log(car, 'this is car')
     var self = this;
     $.ajax({
       url: 'http://localhost:3000/vehicles',
@@ -56,10 +57,16 @@ class App extends React.Component {
 
   }
   soldVehicleSubmit(car){
+    var sold = this.state.cars.filter(function (veh) {return Number(veh.last4) === Number(car.last4)});
+    this.state.soldCars.push(sold[0])
     this.setState({ cars: this.state.cars.filter(function (veh) {return Number(veh.last4) != Number(car.last4)})})
   }
   addRepairSubmit(car){
-    this.state.cars.filter(function (veh) { return Number(veh.last4) == Number(car.last4)})[0].repairs+=Number(car.repair)
+
+    var current = this.state.cars.filter(function (veh) {
+      return Number(veh.last4) == Number(car.last4)
+    })
+    current[0].repairs += Number(car.repair)
     this.setState({ cars : this.state.cars })
   }
 

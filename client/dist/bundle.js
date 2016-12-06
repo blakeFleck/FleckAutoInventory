@@ -71,6 +71,8 @@
 	
 	var _addRepair = __webpack_require__(/*! ./addRepair.jsx */ 183);
 	
+	var _soldcarinventory = __webpack_require__(/*! ./soldcarinventory.jsx */ 184);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -90,7 +92,9 @@
 	
 	    _this.state = {
 	      cars: [],
-	      soldCars: []
+	      soldCars: [{ make: "Lexus",
+	        model: "GS",
+	        last4: 40000 }]
 	    };
 	    return _this;
 	  }
@@ -116,6 +120,7 @@
 	  }, {
 	    key: 'addVehicleSubmit',
 	    value: function addVehicleSubmit(car) {
+	      console.log(car, 'this is car');
 	      var self = this;
 	      _jquery2.default.ajax({
 	        url: 'http://localhost:3000/vehicles',
@@ -135,6 +140,10 @@
 	  }, {
 	    key: 'soldVehicleSubmit',
 	    value: function soldVehicleSubmit(car) {
+	      var sold = this.state.cars.filter(function (veh) {
+	        return Number(veh.last4) === Number(car.last4);
+	      });
+	      this.state.soldCars.push(sold[0]);
 	      this.setState({ cars: this.state.cars.filter(function (veh) {
 	          return Number(veh.last4) != Number(car.last4);
 	        }) });
@@ -142,9 +151,11 @@
 	  }, {
 	    key: 'addRepairSubmit',
 	    value: function addRepairSubmit(car) {
-	      this.state.cars.filter(function (veh) {
+	
+	      var current = this.state.cars.filter(function (veh) {
 	        return Number(veh.last4) == Number(car.last4);
-	      })[0].repairs += Number(car.repair);
+	      });
+	      current[0].repairs += Number(car.repair);
 	      this.setState({ cars: this.state.cars });
 	    }
 	  }, {
@@ -154,10 +165,14 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(_addCar.AddCar, { addVehicleSubmit: this.addVehicleSubmit.bind(this) }),
+	        '--------------Current Inventory Tracker-------- ---------------------------------------------',
 	        _react2.default.createElement(_carList.CarList, { cars: this.state.cars }),
+	        '--------------Add to Sold Inventory-------- ---------------------------------------------',
 	        _react2.default.createElement(_soldCar.SoldCar, { soldVehicleSubmit: this.soldVehicleSubmit.bind(this) }),
+	        '--------------Add Repair-------------------- ---------------------------------------------',
 	        _react2.default.createElement(_addRepair.AddRepair, { addRepairSubmit: this.addRepairSubmit.bind(this) }),
-	        _react2.default.createElement(SoldVehicleInventory, null)
+	        '--------------Sold Inventory Tracker-------- ---------------------------------------------',
+	        _react2.default.createElement(_soldcarinventory.SoldCarInventoryList, { cars: this.state.soldCars })
 	      );
 	    }
 	  }]);
@@ -32465,7 +32480,8 @@
 	    _this.state = {
 	      make: '',
 	      model: '',
-	      last4: ''
+	      last4: '',
+	      repairs: 0
 	
 	    };
 	    return _this;
@@ -32518,7 +32534,7 @@
 	          'p',
 	          null,
 	          'Last4:',
-	          _react2.default.createElement('input', { type: 'text', onChange: this.handleChangeLast4.bind(this), value: this.state.last4 })
+	          _react2.default.createElement('input', { type: 'number', onChange: this.handleChangeLast4.bind(this), value: this.state.last4 })
 	        )
 	      );
 	    }
@@ -32662,7 +32678,7 @@
 	
 	    _this.state = {
 	      last4: '',
-	      repair: ''
+	      repair: 0
 	    };
 	    return _this;
 	  }
@@ -32675,7 +32691,7 @@
 	  }, {
 	    key: 'handleCostChange',
 	    value: function handleCostChange(event) {
-	      this.setState({ repair: event.target.value });
+	      this.setState({ repair: parseInt(event.target.value) });
 	    }
 	  }, {
 	    key: 'clickedSubmit',
@@ -32713,6 +32729,94 @@
 	}(_react2.default.Component);
 	
 	exports.AddRepair = AddRepair;
+
+/***/ },
+/* 184 */
+/*!*****************************************!*\
+  !*** ./client/src/soldcarinventory.jsx ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.SoldCarInventoryList = undefined;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _eachsoldcar = __webpack_require__(/*! ./eachsoldcar.jsx */ 185);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var SoldCarInventoryList = function SoldCarInventoryList(props) {
+	
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    props.cars.map(function (car) {
+	      return _react2.default.createElement(_eachsoldcar.EachSoldCar, {
+	        car: car
+	      });
+	    })
+	  );
+	};
+	
+	exports.SoldCarInventoryList = SoldCarInventoryList;
+
+/***/ },
+/* 185 */
+/*!************************************!*\
+  !*** ./client/src/eachsoldcar.jsx ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.EachSoldCar = undefined;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var EachSoldCar = function EachSoldCar(props) {
+	
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'div',
+	      null,
+	      ' Make: ',
+	      props.car.make,
+	      ' '
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      null,
+	      ' Model: ',
+	      props.car.model,
+	      ' '
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      null,
+	      ' Last4: ',
+	      props.car.last4,
+	      ' '
+	    )
+	  );
+	};
+	
+	exports.EachSoldCar = EachSoldCar;
 
 /***/ }
 /******/ ]);

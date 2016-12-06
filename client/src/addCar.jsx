@@ -7,7 +7,8 @@ class AddCar extends React.Component {
     this.state= {
       make:'',
       model:'',
-      last4:''
+      last4:'',
+      repairs:0,
 
     }
   }
@@ -36,7 +37,7 @@ class AddCar extends React.Component {
        </p>
        <p>
        Last4:
-       <input type="text" onChange={this.handleChangeLast4.bind(this)} value={this.state.last4}/>
+       <input type="number" onChange={this.handleChangeLast4.bind(this)} value={this.state.last4}/>
        </p>
       </div>)
   }

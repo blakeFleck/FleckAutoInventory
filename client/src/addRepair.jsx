@@ -8,14 +8,14 @@ class AddRepair extends React.Component{
     super(props)
     this.state ={
       last4:'',
-      repair:''
+      repair:0,
     }
   }
     handleIdChange(event){
       this.setState({ last4: event.target.value })
     }
     handleCostChange(event){
-      this.setState({ repair: event.target.value })
+      this.setState({ repair: parseInt(event.target.value) })
     }
     clickedSubmit(){
       this.props.addRepairSubmit(this.state)
