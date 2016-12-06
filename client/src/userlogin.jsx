@@ -23,8 +23,12 @@ class UserLogin extends React.Component{
   render(){
 
     return(<div>
+      <p>UserName:
       <input type="text" value={this.state.username} onChange={this.handleChangeOnUsername.bind(this)}/>
-      <input type="text" value={this.state.password} onChange={this.handleChangeOnPassword.bind(this)}/>
+      </p>
+      <p>Password:
+      <input type="password" value={this.state.password} onChange={this.handleChangeOnPassword.bind(this)}/>
+      </p>
       <button onClick={this.onSubmit.bind(this)}>Sign In</button>
 
       </div>)

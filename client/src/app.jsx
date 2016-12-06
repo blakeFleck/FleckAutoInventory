@@ -17,6 +17,7 @@ class App extends React.Component {
       cars: [],
       soldCars: [],
       userLoggedIn: false,
+      checkSold: false
     }
   }
 
@@ -38,7 +39,6 @@ class App extends React.Component {
 
   }
   addVehicleSubmit(car){
-    console.log(car, 'this is car')
     var self = this;
     $.ajax({
       url: 'http://localhost:3000/vehicles',
@@ -72,14 +72,22 @@ class App extends React.Component {
   addUserName(user){
     console.log(user)
     if(user.username === 'blake' && user.password === 'blake'){
-      console.log('entered')
       this.setState({
       userLoggedIn : true
       })
     }
   }
-
-
+  LogOut(){
+    this.setState({
+      userLoggedIn: false,
+      checkSold: false
+    })
+  }
+  CheckSold(){
+    this.setState({
+      checkSold: true
+    })
+  }
   render () {
 
     if(this.state.userLoggedIn === false){
@@ -89,8 +97,7 @@ class App extends React.Component {
         />
       </div>)
 
-    }else{
-
+    }else if(this.state.checkSold === false){
 
     return (<div>
       <AddCar addVehicleSubmit = {this.addVehicleSubmit.bind(this)} />
@@ -104,9 +111,18 @@ class App extends React.Component {
       --------------Add Repair--------------------
       ---------------------------------------------
       <AddRepair addRepairSubmit={this.addRepairSubmit.bind(this)}/>
+      <button onClick={this.CheckSold.bind(this)}>Check Sold Cars </button>
+      <button onClick={this.LogOut.bind(this)}>Log Out</button>
+      </div>)
+    }else if(this.state.checkSold === true){
+
+    return(<div>
       --------------Sold Inventory Tracker--------
       ---------------------------------------------
       <SoldCarInventoryList cars = {this.state.soldCars}/>
+      --------------------------------------------
+      --------------------------------------------
+      <button onClick={this.LogOut.bind(this)}>Log Out</button>
     </div>)
     }
   }
