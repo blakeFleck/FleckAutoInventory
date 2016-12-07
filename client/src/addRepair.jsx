@@ -23,12 +23,13 @@ class AddRepair extends React.Component{
 
   render(){
     return(<div>
-      <div>Select Vehicle by Last 4
+      <h1>Add Repair Cost</h1>
+      <p>Select Vehicle by Last 4
       <input type='number' onChange={this.handleIdChange.bind(this)}></input>
-      </div>
-      <div> Please add Cost:
+      </p>
+      <p> Please add Cost:
       <input type='number' onChange={this.handleCostChange.bind(this)}></input>
-      </div>
+      </p>
       <button onClick={this.clickedSubmit.bind(this)}>Add Repair</button>
       </div>)
 

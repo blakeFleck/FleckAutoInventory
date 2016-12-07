@@ -28,13 +28,14 @@ class SoldCar extends React.Component{
   render(){
     return(
       <div>
+      <h1>Move Car from Inventory to Sold Inventory</h1>
 
-      <div>Select Vehicle by Last 4 of Vin:
+      <p>Select by Last 4 of Vin:
       <input type="number" onChange={this.handleVinSold.bind(this)}></input>
-      </div>
-      <div>What was Purchase Price:
+      </p>
+      <p>What was Purchase Price:
       <input type="number" onChange={this.handlePriceSelector.bind(this)}></input>
-      </div>
+      </p>
       <button onClick={this.soldVehicle.bind(this)}>Confirm Sold Vehicle</button>
       </div>)
 

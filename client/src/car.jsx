@@ -6,6 +6,7 @@ var Car = (props) => {
     <div> Model: {props.car.model} </div>
     <div> Last4: {props.car.last4} </div>
     <div> Repairs: {props.car.repairs} </div>
+    ----------------------------------------
     </div>)
 }
 

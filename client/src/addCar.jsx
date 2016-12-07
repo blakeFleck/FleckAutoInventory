@@ -26,7 +26,7 @@ class AddCar extends React.Component {
   }
   render(){
     return(<div>
-      <button onClick={this.addVehicle.bind(this)}>New Vehicle</button>
+      <h1>Add Vehicle</h1>
       <p>
         Make:
         <input type="text" onChange={this.handleChangeMake.bind(this)} value={this.state.make} />
@@ -39,6 +39,7 @@ class AddCar extends React.Component {
        Last4:
        <input type="number" onChange={this.handleChangeLast4.bind(this)} value={this.state.last4}/>
        </p>
+      <button onClick={this.addVehicle.bind(this)}>New Vehicle</button>
       </div>)
   }
 

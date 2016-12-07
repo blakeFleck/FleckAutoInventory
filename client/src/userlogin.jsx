@@ -23,6 +23,7 @@ class UserLogin extends React.Component{
   render(){
 
     return(<div>
+      <h1>Welcome to Fleck Auto Inventory Tracker</h1>
       <p>UserName:
       <input type="text" value={this.state.username} onChange={this.handleChangeOnUsername.bind(this)}/>
       </p>

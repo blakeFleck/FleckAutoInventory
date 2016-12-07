@@ -67,6 +67,19 @@ class App extends React.Component {
       return Number(veh.last4) == Number(car.last4)
     })
     current[0].repairs += Number(car.repair)
+
+    var self = this;
+    $.ajax({
+      url: 'http://localhost:3000/vehiclesRepair',
+      method: 'POST',
+      dataType: 'json',
+      data: car,
+      success: function(data) {
+      },
+      error: function(xhr, textStatus, error) {
+        console.log('text status', textStatus, 'error', error);
+      }
+    });
     this.setState({ cars : this.state.cars })
   }
   addUserName(user){
@@ -101,15 +114,8 @@ class App extends React.Component {
 
     return (<div>
       <AddCar addVehicleSubmit = {this.addVehicleSubmit.bind(this)} />
-      --------------Current Inventory Tracker--------
-      ---------------------------------------------
       <CarList cars = {this.state.cars} />
-      --------------Add to Sold Inventory--------
-      ---------------------------------------------
-
       <SoldCar soldVehicleSubmit={this.soldVehicleSubmit.bind(this)}/>
-      --------------Add Repair--------------------
-      ---------------------------------------------
       <AddRepair addRepairSubmit={this.addRepairSubmit.bind(this)}/>
       <button onClick={this.CheckSold.bind(this)}>Check Sold Cars </button>
       <button onClick={this.LogOut.bind(this)}>Log Out</button>
@@ -117,12 +123,10 @@ class App extends React.Component {
     }else if(this.state.checkSold === true){
 
     return(<div>
-      --------------Sold Inventory Tracker--------
-      ---------------------------------------------
       <SoldCarInventoryList cars = {this.state.soldCars}/>
-      --------------------------------------------
-      --------------------------------------------
+      <p>
       <button onClick={this.LogOut.bind(this)}>Log Out</button>
+      </p>
     </div>)
     }
   }
