@@ -16,13 +16,25 @@ app.use(function(req, res, next) {
 
 app.post('/vehicles', function(req, res) {
   var vehicle = req.body;
-  console.log(typeof(vehicle.repairs))
   var counter = data[data.length-1].id + 1;
   vehicle.id = counter;
   vehicle.repairs = Number(vehicle.repairs)
   data.push(vehicle);
   res.send(data);
 });
+app.post('/vehiclesRepair', function(req,res){
+  var vehicle = req.body;
+  console.log(vehicle)
+  vehicle.repair = Number(vehicle.repair);
+  vehicle.last4 = Number(vehicle.last4);
+  for( var i = 0; i < data.length; i++ ){
+    if(vehicle.last4 == data[i].last4){
+      data[i].repairs+=vehicle.repair
+    }
+  }
+  res.send(data);
+
+})
 
 app.delete('/vehicles', function(req, res) {
   // determine what we're sending - through dog name or index? index

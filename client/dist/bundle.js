@@ -73,6 +73,8 @@
 	
 	var _soldcarinventory = __webpack_require__(/*! ./soldcarinventory.jsx */ 184);
 	
+	var _userlogin = __webpack_require__(/*! ./userlogin.jsx */ 186);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -92,9 +94,9 @@
 	
 	    _this.state = {
 	      cars: [],
-	      soldCars: [{ make: "Lexus",
-	        model: "GS",
-	        last4: 40000 }]
+	      soldCars: [],
+	      userLoggedIn: false,
+	      checkSold: false
 	    };
 	    return _this;
 	  }
@@ -120,7 +122,6 @@
 	  }, {
 	    key: 'addVehicleSubmit',
 	    value: function addVehicleSubmit(car) {
-	      console.log(car, 'this is car');
 	      var self = this;
 	      _jquery2.default.ajax({
 	        url: 'http://localhost:3000/vehicles',
@@ -156,24 +157,94 @@
 	        return Number(veh.last4) == Number(car.last4);
 	      });
 	      current[0].repairs += Number(car.repair);
+	
+	      var self = this;
+	      _jquery2.default.ajax({
+	        url: 'http://localhost:3000/vehiclesRepair',
+	        method: 'POST',
+	        dataType: 'json',
+	        data: car,
+	        success: function success(data) {},
+	        error: function error(xhr, textStatus, _error3) {
+	          console.log('text status', textStatus, 'error', _error3);
+	        }
+	      });
 	      this.setState({ cars: this.state.cars });
+	    }
+	  }, {
+	    key: 'addUserName',
+	    value: function addUserName(user) {
+	      console.log(user);
+	      if (user.username === 'blake' && user.password === 'blake') {
+	        this.setState({
+	          userLoggedIn: true
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'LogOut',
+	    value: function LogOut() {
+	      this.setState({
+	        userLoggedIn: false,
+	        checkSold: false
+	      });
+	    }
+	  }, {
+	    key: 'CheckSold',
+	    value: function CheckSold() {
+	      this.setState({
+	        checkSold: true
+	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(_addCar.AddCar, { addVehicleSubmit: this.addVehicleSubmit.bind(this) }),
-	        '--------------Current Inventory Tracker-------- ---------------------------------------------',
-	        _react2.default.createElement(_carList.CarList, { cars: this.state.cars }),
-	        '--------------Add to Sold Inventory-------- ---------------------------------------------',
-	        _react2.default.createElement(_soldCar.SoldCar, { soldVehicleSubmit: this.soldVehicleSubmit.bind(this) }),
-	        '--------------Add Repair-------------------- ---------------------------------------------',
-	        _react2.default.createElement(_addRepair.AddRepair, { addRepairSubmit: this.addRepairSubmit.bind(this) }),
-	        '--------------Sold Inventory Tracker-------- ---------------------------------------------',
-	        _react2.default.createElement(_soldcarinventory.SoldCarInventoryList, { cars: this.state.soldCars })
-	      );
+	
+	      if (this.state.userLoggedIn === false) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_userlogin.UserLogin, {
+	            addUserName: this.addUserName.bind(this)
+	          })
+	        );
+	      } else if (this.state.checkSold === false) {
+	
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_addCar.AddCar, { addVehicleSubmit: this.addVehicleSubmit.bind(this) }),
+	          _react2.default.createElement(_carList.CarList, { cars: this.state.cars }),
+	          _react2.default.createElement(_soldCar.SoldCar, { soldVehicleSubmit: this.soldVehicleSubmit.bind(this) }),
+	          _react2.default.createElement(_addRepair.AddRepair, { addRepairSubmit: this.addRepairSubmit.bind(this) }),
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: this.CheckSold.bind(this) },
+	            'Check Sold Cars '
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: this.LogOut.bind(this) },
+	            'Log Out'
+	          )
+	        );
+	      } else if (this.state.checkSold === true) {
+	
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_soldcarinventory.SoldCarInventoryList, { cars: this.state.soldCars }),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	              'button',
+	              { onClick: this.LogOut.bind(this) },
+	              'Log Out'
+	            )
+	          )
+	        );
+	      }
 	    }
 	  }]);
 	
@@ -32376,6 +32447,11 @@
 	  return _react2.default.createElement(
 	    'div',
 	    null,
+	    _react2.default.createElement(
+	      'h1',
+	      null,
+	      ' Current Inventory '
+	    ),
 	    props.cars.map(function (car) {
 	      return _react2.default.createElement(_car.Car, { car: car });
 	    })
@@ -32435,7 +32511,8 @@
 	      ' Repairs: ',
 	      props.car.repairs,
 	      ' '
-	    )
+	    ),
+	    '----------------------------------------'
 	  );
 	};
 	
@@ -32514,9 +32591,9 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'button',
-	          { onClick: this.addVehicle.bind(this) },
-	          'New Vehicle'
+	          'h1',
+	          null,
+	          'Add Vehicle'
 	        ),
 	        _react2.default.createElement(
 	          'p',
@@ -32535,6 +32612,11 @@
 	          null,
 	          'Last4:',
 	          _react2.default.createElement('input', { type: 'number', onChange: this.handleChangeLast4.bind(this), value: this.state.last4 })
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.addVehicle.bind(this) },
+	          'New Vehicle'
 	        )
 	      );
 	    }
@@ -32615,13 +32697,18 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'div',
+	          'h1',
 	          null,
-	          'Select Vehicle by Last 4 of Vin:',
+	          'Move Car from Inventory to Sold Inventory'
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'Select by Last 4 of Vin:',
 	          _react2.default.createElement('input', { type: 'number', onChange: this.handleVinSold.bind(this) })
 	        ),
 	        _react2.default.createElement(
-	          'div',
+	          'p',
 	          null,
 	          'What was Purchase Price:',
 	          _react2.default.createElement('input', { type: 'number', onChange: this.handlePriceSelector.bind(this) })
@@ -32705,13 +32792,18 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'div',
+	          'h1',
+	          null,
+	          'Add Repair Cost'
+	        ),
+	        _react2.default.createElement(
+	          'p',
 	          null,
 	          'Select Vehicle by Last 4',
 	          _react2.default.createElement('input', { type: 'number', onChange: this.handleIdChange.bind(this) })
 	        ),
 	        _react2.default.createElement(
-	          'div',
+	          'p',
 	          null,
 	          ' Please add Cost:',
 	          _react2.default.createElement('input', { type: 'number', onChange: this.handleCostChange.bind(this) })
@@ -32757,6 +32849,11 @@
 	  return _react2.default.createElement(
 	    'div',
 	    null,
+	    _react2.default.createElement(
+	      'h1',
+	      null,
+	      'Sold Vehicle Inventory '
+	    ),
 	    props.cars.map(function (car) {
 	      return _react2.default.createElement(_eachsoldcar.EachSoldCar, {
 	        car: car
@@ -32812,11 +32909,109 @@
 	      ' Last4: ',
 	      props.car.last4,
 	      ' '
-	    )
+	    ),
+	    '---------------------------------'
 	  );
 	};
 	
 	exports.EachSoldCar = EachSoldCar;
+
+/***/ },
+/* 186 */
+/*!**********************************!*\
+  !*** ./client/src/userlogin.jsx ***!
+  \**********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.UserLogin = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var UserLogin = function (_React$Component) {
+	  _inherits(UserLogin, _React$Component);
+	
+	  function UserLogin(props) {
+	    _classCallCheck(this, UserLogin);
+	
+	    var _this = _possibleConstructorReturn(this, (UserLogin.__proto__ || Object.getPrototypeOf(UserLogin)).call(this, props));
+	
+	    _this.state = {
+	      username: '',
+	      password: ''
+	    };
+	
+	    return _this;
+	  }
+	
+	  _createClass(UserLogin, [{
+	    key: 'handleChangeOnUsername',
+	    value: function handleChangeOnUsername(event) {
+	      this.setState({ username: event.target.value });
+	    }
+	  }, {
+	    key: 'handleChangeOnPassword',
+	    value: function handleChangeOnPassword(event) {
+	      this.setState({ password: event.target.value });
+	    }
+	  }, {
+	    key: 'onSubmit',
+	    value: function onSubmit() {
+	      this.props.addUserName(this.state);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          'Welcome to Fleck Auto Inventory Tracker'
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'UserName:',
+	          _react2.default.createElement('input', { type: 'text', value: this.state.username, onChange: this.handleChangeOnUsername.bind(this) })
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'Password:',
+	          _react2.default.createElement('input', { type: 'password', value: this.state.password, onChange: this.handleChangeOnPassword.bind(this) })
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.onSubmit.bind(this) },
+	          'Sign In'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return UserLogin;
+	}(_react2.default.Component);
+	
+	exports.UserLogin = UserLogin;
 
 /***/ }
 /******/ ]);
